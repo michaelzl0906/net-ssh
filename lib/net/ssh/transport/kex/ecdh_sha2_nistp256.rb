@@ -18,12 +18,12 @@ module Net
           private
 
           def generate_key # :nodoc:
-            OpenSSL::PKey::EC.generate(curve_name)
+            OpenSSL::PKey::EC.new(curve_name).generate_key
           end
 
           # compute shared secret from server's public key and client's private key
           def compute_shared_secret(server_ecdh_pubkey)
-            pk = OpenSSL::PKey::EC::Point.new(OpenSSL::PKey::EC.new(curve_name).group,
+            pk = OpenSSL::PKey::EC::Point.new(OpenSSL::PKey::EC::Group.new(curve_name),
                                               OpenSSL::BN.new(server_ecdh_pubkey, 2))
             OpenSSL::BN.new(ecdh.dh_compute_key(pk), 2)
           end
